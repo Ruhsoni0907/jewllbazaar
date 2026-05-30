@@ -1,0 +1,933 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Zevar — The Art of Indian Jewellery</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Outfit:wght@300;400;500&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --black:#080608;
+  --black2:#0F0C10;
+  --black3:#161018;
+  --gold:#C8A84B;
+  --gold2:#E4C97A;
+  --gold3:#F5E4A8;
+  --gold-dim:#7A6228;
+  --rose:#C4806A;
+  --rose-dim:#7A4030;
+  --cream:#F5EDD8;
+  --cream2:#E8D9BE;
+  --white:#FDFAF4;
+  --muted:rgba(245,237,216,0.45);
+  --muted2:rgba(245,237,216,0.22);
+  --border:rgba(200,168,75,0.18);
+  --border2:rgba(200,168,75,0.35);
+  --f-display:'Cinzel Decorative',serif;
+  --f-serif:'Crimson Pro',serif;
+  --f-ui:'Outfit',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:var(--f-ui);
+  background:var(--black);
+  color:var(--cream);
+  overflow-x:hidden;
+}
+
+/* ─── NOISE OVERLAY ─── */
+body::after{
+  content:'';position:fixed;inset:0;pointer-events:none;z-index:9000;
+  opacity:.03;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:200px 200px;
+}
+
+/* ─── NAV ─── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:500;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:0 3rem;height:72px;
+  background:linear-gradient(to bottom,rgba(8,6,8,.95),transparent);
+  backdrop-filter:blur(2px);
+  transition:background .4s;
+}
+nav.scrolled{background:rgba(8,6,8,.96);border-bottom:1px solid var(--border)}
+.nav-logo{
+  font-family:var(--f-display);font-size:20px;
+  color:var(--gold2);letter-spacing:.08em;text-decoration:none;
+}
+.nav-logo sup{
+  font-family:var(--f-serif);font-size:11px;font-style:italic;
+  color:var(--rose);font-weight:300;letter-spacing:.15em;vertical-align:super;
+}
+.nav-links{display:flex;align-items:center;gap:2.5rem;list-style:none}
+.nav-links a{
+  font-family:var(--f-ui);font-size:12px;font-weight:400;
+  color:var(--muted);text-decoration:none;
+  letter-spacing:.12em;text-transform:uppercase;
+  transition:color .2s;position:relative;
+}
+.nav-links a::after{
+  content:'';position:absolute;bottom:-3px;left:0;right:0;height:1px;
+  background:var(--gold);transform:scaleX(0);transition:transform .25s;
+}
+.nav-links a:hover{color:var(--gold2)}
+.nav-links a:hover::after{transform:scaleX(1)}
+.nav-btn{
+  font-family:var(--f-ui);font-size:11px;font-weight:500;
+  letter-spacing:.15em;text-transform:uppercase;
+  padding:10px 22px;border:1px solid var(--gold-dim);
+  background:transparent;color:var(--gold2);cursor:pointer;
+  transition:all .25s;
+}
+.nav-btn:hover{background:var(--gold);color:var(--black);border-color:var(--gold)}
+
+/* ─── HERO ─── */
+.hero{
+  position:relative;height:100vh;min-height:700px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  overflow:hidden;
+}
+.hero-glow{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse 70% 55% at 50% 65%,rgba(200,168,75,.12) 0%,transparent 70%);
+  animation:pulseGlow 6s ease-in-out infinite;
+}
+@keyframes pulseGlow{
+  0%,100%{opacity:.7;transform:scale(1)}
+  50%{opacity:1;transform:scale(1.06)}
+}
+.hero-grid{
+  position:absolute;inset:0;pointer-events:none;
+  background-image:
+    linear-gradient(rgba(200,168,75,.04) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(200,168,75,.04) 1px,transparent 1px);
+  background-size:60px 60px;
+  mask-image:radial-gradient(ellipse 80% 80% at 50% 50%,black 0%,transparent 75%);
+}
+.hero-corner{
+  position:absolute;width:120px;height:120px;
+  border-color:var(--gold-dim);border-style:solid;opacity:.35;
+}
+.hero-corner.tl{top:80px;left:60px;border-width:1px 0 0 1px}
+.hero-corner.tr{top:80px;right:60px;border-width:1px 1px 0 0}
+.hero-corner.bl{bottom:80px;left:60px;border-width:0 0 1px 1px}
+.hero-corner.br{bottom:80px;right:60px;border-width:0 1px 1px 0}
+.hero-eyebrow{
+  font-family:var(--f-serif);font-size:14px;font-style:italic;font-weight:300;
+  color:var(--rose);letter-spacing:.2em;margin-bottom:1.4rem;
+  opacity:0;animation:fadeUp .8s .2s forwards;
+}
+.hero h1{
+  font-family:var(--f-display);font-size:clamp(44px,7.5vw,96px);
+  font-weight:400;line-height:.95;text-align:center;
+  color:var(--white);letter-spacing:-.01em;
+  opacity:0;animation:fadeUp .9s .4s forwards;
+}
+.hero h1 .line2{
+  display:block;font-size:clamp(28px,4.5vw,58px);
+  font-weight:400;color:var(--gold2);font-style:italic;
+  letter-spacing:.06em;margin-top:.3em;
+}
+.hero-sub{
+  font-family:var(--f-serif);font-size:18px;font-weight:300;
+  color:var(--muted);text-align:center;max-width:480px;
+  line-height:1.65;margin-top:2rem;
+  opacity:0;animation:fadeUp .8s .6s forwards;
+}
+.hero-actions{
+  display:flex;gap:1.2rem;margin-top:3rem;align-items:center;
+  opacity:0;animation:fadeUp .8s .8s forwards;
+}
+.btn-primary{
+  font-family:var(--f-ui);font-size:12px;font-weight:500;
+  letter-spacing:.15em;text-transform:uppercase;
+  padding:15px 36px;background:var(--gold);color:var(--black);
+  border:none;cursor:pointer;transition:all .25s;
+}
+.btn-primary:hover{background:var(--gold2);transform:translateY(-1px)}
+.btn-secondary{
+  font-family:var(--f-ui);font-size:12px;font-weight:400;
+  letter-spacing:.12em;text-transform:uppercase;
+  color:var(--muted);text-decoration:none;
+  display:flex;align-items:center;gap:8px;transition:color .2s;
+}
+.btn-secondary:hover{color:var(--cream)}
+.btn-secondary span{
+  width:32px;height:1px;background:currentColor;
+  display:inline-block;transition:width .25s;
+}
+.btn-secondary:hover span{width:48px}
+.hero-scroll{
+  position:absolute;bottom:36px;left:50%;transform:translateX(-50%);
+  font-family:var(--f-ui);font-size:10px;letter-spacing:.2em;
+  text-transform:uppercase;color:var(--gold-dim);
+  display:flex;flex-direction:column;align-items:center;gap:10px;
+  opacity:0;animation:fadeUp .8s 1.1s forwards;
+}
+.scroll-line{
+  width:1px;height:40px;background:linear-gradient(to bottom,var(--gold-dim),transparent);
+  animation:scrollPulse 2s ease-in-out infinite;
+}
+@keyframes scrollPulse{0%,100%{transform:scaleY(.5);opacity:.5}50%{transform:scaleY(1);opacity:1}}
+
+/* ─── MARQUEE ─── */
+.marquee-wrap{
+  background:var(--gold);padding:14px 0;overflow:hidden;
+  border-top:none;border-bottom:none;
+}
+.marquee-track{
+  display:flex;gap:0;white-space:nowrap;
+  animation:marquee 28s linear infinite;
+  width:max-content;
+}
+.marquee-track:hover{animation-play-state:paused}
+@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.marquee-item{
+  font-family:var(--f-display);font-size:11px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;color:var(--black);
+  padding:0 2.5rem;
+}
+.marquee-dot{color:rgba(0,0,0,.4);padding:0 .5rem}
+
+/* ─── SECTION COMMONS ─── */
+.section{padding:7rem 0}
+.container{max-width:1240px;margin:0 auto;padding:0 3rem}
+.reveal{opacity:0;transform:translateY(40px);transition:opacity .8s,transform .8s}
+.reveal.in{opacity:1;transform:translateY(0)}
+.reveal-delay-1{transition-delay:.1s}
+.reveal-delay-2{transition-delay:.2s}
+.reveal-delay-3{transition-delay:.3s}
+.reveal-delay-4{transition-delay:.4s}
+
+.eyebrow{
+  font-family:var(--f-serif);font-size:13px;font-style:italic;
+  color:var(--rose);letter-spacing:.2em;margin-bottom:1rem;display:block;
+}
+.section-title{
+  font-family:var(--f-display);font-size:clamp(30px,4vw,52px);
+  font-weight:400;color:var(--white);line-height:1.1;margin-bottom:1.2rem;
+}
+.section-body{
+  font-family:var(--f-serif);font-size:18px;font-weight:300;
+  color:var(--muted);line-height:1.7;max-width:540px;
+}
+
+/* ─── STATS BAR ─── */
+.stats-bar{
+  display:grid;grid-template-columns:repeat(4,1fr);
+  border:1px solid var(--border);
+  background:var(--black2);
+}
+.stat-item{
+  padding:2.5rem 2rem;border-right:1px solid var(--border);
+  text-align:center;
+}
+.stat-item:last-child{border-right:none}
+.stat-num{
+  font-family:var(--f-display);font-size:38px;font-weight:400;
+  color:var(--gold2);display:block;line-height:1;margin-bottom:.4rem;
+}
+.stat-label{
+  font-family:var(--f-ui);font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;color:var(--muted2);
+}
+
+/* ─── JEWELLERS ─── */
+.filters-row{
+  display:flex;align-items:center;gap:.7rem;flex-wrap:wrap;margin-bottom:3.5rem;
+}
+.fp{
+  font-family:var(--f-ui);font-size:11px;font-weight:400;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:8px 18px;border:1px solid var(--border);
+  background:transparent;color:var(--muted2);cursor:pointer;
+  transition:all .2s;
+}
+.fp:hover,.fp.active{
+  border-color:var(--gold);color:var(--gold2);
+  background:rgba(200,168,75,.08);
+}
+.jewellers-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(280px,1fr));
+  gap:1.5px;
+  background:var(--border);
+  border:1px solid var(--border);
+}
+.jcard{
+  background:var(--black2);position:relative;overflow:hidden;
+  cursor:default;transition:background .3s;
+  transform-style:preserve-3d;
+}
+.jcard:hover{background:var(--black3)}
+.jcard-shine{
+  position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(circle at var(--mx,50%) var(--my,50%),rgba(200,168,75,.08) 0%,transparent 60%);
+  opacity:0;transition:opacity .3s;
+}
+.jcard:hover .jcard-shine{opacity:1}
+.jcard-top{
+  padding:2.5rem 2rem 1.5rem;
+  border-bottom:1px solid var(--border);
+  position:relative;
+}
+.jcard-monogram{
+  font-family:var(--f-display);font-size:48px;font-weight:700;
+  line-height:1;margin-bottom:1.2rem;
+}
+.jcard-name{
+  font-family:var(--f-serif);font-size:22px;font-weight:400;
+  color:var(--white);margin-bottom:.3rem;line-height:1.2;
+}
+.jcard-location{
+  font-family:var(--f-ui);font-size:11px;font-weight:300;
+  letter-spacing:.08em;color:var(--muted2);
+  display:flex;align-items:center;gap:5px;
+}
+.jcard-body{padding:1.5rem 2rem 2rem}
+.jcard-stars{
+  font-size:15px;letter-spacing:2px;margin-bottom:.4rem;
+}
+.jcard-rating-row{
+  display:flex;align-items:baseline;gap:.5rem;margin-bottom:1.2rem;
+}
+.jcard-score{
+  font-family:var(--f-display);font-size:28px;color:var(--gold2);
+}
+.jcard-rcount{
+  font-family:var(--f-ui);font-size:11px;color:var(--muted2);letter-spacing:.06em;
+}
+.jcard-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.5rem}
+.jtag{
+  font-family:var(--f-ui);font-size:10px;font-weight:500;
+  letter-spacing:.12em;text-transform:uppercase;
+  padding:4px 10px;border:1px solid var(--border2);
+  color:var(--gold-dim);
+}
+.jcard-action{
+  width:100%;padding:12px;
+  font-family:var(--f-ui);font-size:11px;font-weight:500;
+  letter-spacing:.15em;text-transform:uppercase;
+  background:transparent;border:1px solid var(--border);
+  color:var(--muted);cursor:pointer;transition:all .2s;
+  display:flex;align-items:center;justify-content:center;gap:10px;
+}
+.jcard-action::after{content:'→';transition:transform .2s}
+.jcard-action:hover{
+  background:var(--gold);color:var(--black);border-color:var(--gold);
+}
+.jcard-action:hover::after{transform:translateX(4px)}
+.badge-featured{
+  position:absolute;top:1.5rem;right:1.5rem;
+  font-family:var(--f-ui);font-size:9px;font-weight:500;
+  letter-spacing:.15em;text-transform:uppercase;
+  padding:4px 10px;background:rgba(200,168,75,.12);
+  border:1px solid var(--border2);color:var(--gold);
+}
+
+/* monogram colors */
+.mon-a{color:var(--gold)}
+.mon-b{color:var(--rose)}
+.mon-c{color:#9FB8D4}
+.mon-d{color:#8BB89A}
+
+/* ─── FEATURE SECTION ─── */
+.feature-split{
+  display:grid;grid-template-columns:1fr 1fr;gap:0;
+  border:1px solid var(--border);
+}
+.feature-visual{
+  background:var(--black2);
+  display:flex;align-items:center;justify-content:center;
+  padding:4rem;min-height:480px;position:relative;overflow:hidden;
+}
+.feature-visual-inner{
+  position:relative;z-index:2;text-align:center;
+}
+.big-ornament{
+  font-family:var(--f-display);font-size:120px;font-weight:700;
+  color:var(--gold);opacity:.08;line-height:1;
+  position:absolute;top:50%;left:50%;
+  transform:translate(-50%,-50%);white-space:nowrap;
+  pointer-events:none;
+}
+.ornament-ring{
+  width:200px;height:200px;border:1px solid var(--border2);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;position:relative;
+}
+.ornament-ring::before{
+  content:'';position:absolute;
+  width:160px;height:160px;border:1px dashed rgba(200,168,75,.2);border-radius:50%;
+}
+.ornament-center{
+  font-family:var(--f-display);font-size:52px;color:var(--gold2);
+}
+.feature-content{
+  padding:5rem 4rem;display:flex;flex-direction:column;justify-content:center;
+  background:var(--black3);border-left:1px solid var(--border);
+}
+.feature-list{margin-top:2rem;display:flex;flex-direction:column;gap:1.5rem}
+.feature-item{display:flex;gap:1.2rem;align-items:flex-start}
+.feature-num{
+  font-family:var(--f-display);font-size:13px;color:var(--gold-dim);
+  min-width:24px;margin-top:3px;
+}
+.feature-item-text h4{
+  font-family:var(--f-serif);font-size:18px;font-weight:600;
+  color:var(--white);margin-bottom:.3rem;
+}
+.feature-item-text p{
+  font-family:var(--f-serif);font-size:15px;font-weight:300;
+  color:var(--muted);line-height:1.6;
+}
+
+/* ─── REVIEW SECTION ─── */
+.review-wrap{
+  display:grid;grid-template-columns:1fr 1.4fr;gap:0;
+  border:1px solid var(--border);
+}
+.review-sidebar{
+  background:var(--black2);padding:4rem 3rem;
+  border-right:1px solid var(--border);
+}
+.sidebar-title{
+  font-family:var(--f-display);font-size:28px;font-weight:400;
+  color:var(--white);margin-bottom:.5rem;line-height:1.2;
+}
+.sidebar-sub{
+  font-family:var(--f-serif);font-size:16px;font-weight:300;
+  color:var(--muted);line-height:1.6;margin-bottom:2.5rem;
+}
+.reviews-list{display:flex;flex-direction:column;gap:0}
+.r-item{
+  padding:1.5rem 0;border-bottom:1px solid var(--border);
+  animation:fadeIn .5s ease;
+}
+.r-item:first-child{padding-top:0}
+.r-item:last-child{border-bottom:none}
+.r-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:.5rem}
+.r-name{font-family:var(--f-ui);font-size:13px;font-weight:500;color:var(--cream2)}
+.r-jeweller{
+  font-family:var(--f-serif);font-size:13px;font-style:italic;
+  color:var(--rose);font-weight:300;
+}
+.r-stars-sm{font-size:12px;color:var(--gold);letter-spacing:1px;margin-bottom:.5rem}
+.r-text{
+  font-family:var(--f-serif);font-size:15px;font-weight:300;
+  color:var(--muted);line-height:1.55;
+}
+.review-form-wrap{padding:4rem 3.5rem;background:var(--black3)}
+.form-title{
+  font-family:var(--f-display);font-size:28px;font-weight:400;
+  color:var(--gold2);margin-bottom:2.5rem;
+}
+.field{margin-bottom:1.5rem}
+.field label{
+  font-family:var(--f-ui);font-size:10px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-dim);display:block;margin-bottom:.6rem;
+}
+.field input,.field select,.field textarea{
+  width:100%;background:rgba(255,255,255,.03);
+  border:1px solid var(--border);border-radius:0;
+  padding:13px 16px;font-family:var(--f-serif);font-size:16px;
+  font-weight:300;color:var(--cream);outline:none;
+  transition:border-color .2s,background .2s;
+  appearance:none;
+}
+.field input::placeholder,.field textarea::placeholder{color:rgba(245,237,216,.25)}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:var(--gold);background:rgba(200,168,75,.04);
+}
+.field select{
+  background-image:url("data:image/svg+xml,%3Csvg width='10' height='6' viewBox='0 0 10 6' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L5 5L9 1' stroke='%23C8A84B' stroke-width='1'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 16px center;
+  padding-right:36px;cursor:none;
+}
+.field select option{background:var(--black2);color:var(--cream)}
+.field textarea{min-height:90px;resize:vertical}
+.star-field{margin-bottom:1.5rem}
+.star-field label{
+  font-family:var(--f-ui);font-size:10px;font-weight:500;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--gold-dim);display:block;margin-bottom:.8rem;
+}
+.star-picker{display:flex;gap:.5rem}
+.sp{
+  font-size:30px;background:none;border:none;cursor:pointer;
+  color:rgba(200,168,75,.2);transition:color .15s,transform .15s;padding:0;line-height:1;
+}
+.sp.lit{color:var(--gold)}
+.sp:hover{transform:scale(1.15)}
+.submit-btn{
+  width:100%;padding:16px;
+  font-family:var(--f-ui);font-size:12px;font-weight:500;
+  letter-spacing:.2em;text-transform:uppercase;
+  background:var(--gold);color:var(--black);border:none;
+  cursor:pointer;transition:all .25s;margin-top:.5rem;
+}
+.submit-btn:hover{background:var(--gold2);letter-spacing:.25em}
+
+/* ─── TOAST ─── */
+#toast{
+  position:fixed;bottom:32px;right:32px;z-index:9000;
+  font-family:var(--f-ui);font-size:12px;letter-spacing:.1em;
+  padding:14px 22px;background:var(--black2);
+  border:1px solid var(--gold-dim);color:var(--gold2);
+  opacity:0;transform:translateY(10px);
+  transition:opacity .3s,transform .3s;pointer-events:none;
+}
+#toast.show{opacity:1;transform:translateY(0)}
+
+/* ─── FOOTER ─── */
+footer{
+  background:var(--black2);border-top:1px solid var(--border);
+  padding:3.5rem 0;
+}
+.footer-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:1.5rem;
+}
+.footer-logo{
+  font-family:var(--f-display);font-size:18px;color:var(--gold2);letter-spacing:.06em;
+}
+.footer-tagline{
+  font-family:var(--f-serif);font-size:14px;font-style:italic;
+  font-weight:300;color:var(--muted2);
+}
+.footer-links{display:flex;gap:2rem;list-style:none}
+.footer-links a{
+  font-family:var(--f-ui);font-size:11px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted2);text-decoration:none;
+  transition:color .2s;
+}
+.footer-links a:hover{color:var(--gold)}
+
+/* ─── ANIMS ─── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px)}to{opacity:1;transform:translateY(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:900px){
+  .review-wrap,.feature-split{grid-template-columns:1fr}
+  .review-sidebar{border-right:none;border-bottom:1px solid var(--border)}
+  .feature-content{border-left:none;border-top:1px solid var(--border)}
+  .stats-bar{grid-template-columns:1fr 1fr}
+  .stat-item:nth-child(2){border-right:none}
+  nav{padding:0 1.5rem}
+  .container{padding:0 1.5rem}
+  .hero-corner{display:none}
+}
+@media(max-width:600px){
+  .nav-links{display:none}
+  .hero h1{font-size:36px}
+  .hero-actions{flex-direction:column}
+  .stats-bar{grid-template-columns:1fr}
+  .stat-item{border-right:none;border-bottom:1px solid var(--border)}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="main-nav">
+  <a href="#" class="nav-logo">ZEVAR <sup>bazaar</sup></a>
+  <ul class="nav-links">
+    <li><a href="#jewellers">Artisans</a></li>
+    <li><a href="#about">Our Story</a></li>
+    <li><a href="#review-section">Reviews</a></li>
+    <li><button class="nav-btn" onclick="scrollTo({top:document.getElementById('review-section').offsetTop,behavior:'smooth'})">List Your Shop</button></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-corner tl"></div>
+  <div class="hero-corner tr"></div>
+  <div class="hero-corner bl"></div>
+  <div class="hero-corner br"></div>
+
+  <span class="hero-eyebrow">✦ &nbsp; Jaipur's Finest Part-Time Artisans &nbsp; ✦</span>
+  <h1>The Art of<span class="line2">Indian Jewellery</span></h1>
+  <p class="hero-sub">Discover master craftspeople specialising in gold, kundan, and polki. Curated. Trusted. Timeless.</p>
+  <div class="hero-actions">
+    <button class="btn-primary" onclick="scrollTo({top:document.getElementById('jewellers').offsetTop-80,behavior:'smooth'})">Explore Artisans</button>
+    <a href="#about" class="btn-secondary"><span></span>Our Story</a>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marquee-track">
+    <span class="marquee-item">Kundan <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Polki <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">22kt Gold <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Jadau <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Bridal Sets <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Temple Jewellery <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Necklaces <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Bangles <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Earrings <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Maang Tikka <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Kundan <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Polki <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">22kt Gold <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Jadau <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Bridal Sets <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Temple Jewellery <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Necklaces <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Bangles <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Earrings <span class="marquee-dot">◆</span></span>
+    <span class="marquee-item">Maang Tikka <span class="marquee-dot">◆</span></span>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="section" style="padding:5rem 0 0">
+  <div class="container">
+    <div class="stats-bar reveal">
+      <div class="stat-item"><span class="stat-num">48+</span><span class="stat-label">Verified Artisans</span></div>
+      <div class="stat-item"><span class="stat-num">2,400+</span><span class="stat-label">Customer Reviews</span></div>
+      <div class="stat-item"><span class="stat-num">6</span><span class="stat-label">Craft Specialties</span></div>
+      <div class="stat-item"><span class="stat-num">12yrs</span><span class="stat-label">Average Experience</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- JEWELLERS -->
+<section class="section" id="jewellers">
+  <div class="container">
+    <div class="reveal">
+      <span class="eyebrow">Our Artisans</span>
+      <h2 class="section-title">Meet the Craftspeople</h2>
+      <p class="section-body">Each jeweller on Zevar Bazaar is personally verified — a community of part-time masters who pour a lifetime of skill into every piece.</p>
+    </div>
+    <div class="filters-row reveal" style="margin-top:2.5rem">
+      <button class="fp active" onclick="filterJ(this,'all')">All</button>
+      <button class="fp" onclick="filterJ(this,'kundan')">Kundan</button>
+      <button class="fp" onclick="filterJ(this,'polki')">Polki</button>
+      <button class="fp" onclick="filterJ(this,'gold')">Gold</button>
+      <button class="fp" onclick="filterJ(this,'bridal')">Bridal</button>
+      <button class="fp" onclick="filterJ(this,'jadau')">Jadau</button>
+      <button class="fp" onclick="filterJ(this,'temple')">Temple</button>
+    </div>
+    <div class="jewellers-grid reveal" id="jgrid">
+
+      <div class="jcard reveal reveal-delay-1" data-tags="kundan polki bridal">
+        <div class="jcard-shine"></div>
+        <div class="jcard-top">
+          <span class="badge-featured">Featured</span>
+          <div class="jcard-monogram mon-a">RS</div>
+          <div class="jcard-name">Ramniwas Soni</div>
+          <div class="jcard-location">📍 Johari Bazaar, Jaipur</div>
+        </div>
+        <div class="jcard-body">
+          <div class="jcard-stars" style="color:var(--gold)">★★★★★</div>
+          <div class="jcard-rating-row">
+            <span class="jcard-score">4.9</span>
+            <span class="jcard-rcount">48 reviews</span>
+          </div>
+          <div class="jcard-tags">
+            <span class="jtag">Kundan</span>
+            <span class="jtag">Polki</span>
+            <span class="jtag">Bridal</span>
+          </div>
+          <button class="jcard-action" onclick="pickJeweller('Ramniwas Soni')">Write a Review</button>
+        </div>
+      </div>
+
+      <div class="jcard reveal reveal-delay-2" data-tags="gold necklaces bridal">
+        <div class="jcard-shine"></div>
+        <div class="jcard-top">
+          <div class="jcard-monogram mon-b">MJ</div>
+          <div class="jcard-name">Meena Jewels</div>
+          <div class="jcard-location">📍 MI Road, Jaipur</div>
+        </div>
+        <div class="jcard-body">
+          <div class="jcard-stars"><span style="color:var(--gold)">★★★★</span><span style="color:rgba(200,168,75,.2)">★</span></div>
+          <div class="jcard-rating-row">
+            <span class="jcard-score">4.2</span>
+            <span class="jcard-rcount">32 reviews</span>
+          </div>
+          <div class="jcard-tags">
+            <span class="jtag">Gold</span>
+            <span class="jtag">Necklaces</span>
+          </div>
+          <button class="jcard-action" onclick="pickJeweller('Meena Jewels')">Write a Review</button>
+        </div>
+      </div>
+
+      <div class="jcard reveal reveal-delay-3" data-tags="gold bridal sets polki">
+        <div class="jcard-shine"></div>
+        <div class="jcard-top">
+          <span class="badge-featured">Top Rated</span>
+          <div class="jcard-monogram mon-c">SG</div>
+          <div class="jcard-name">Savitri Gold House</div>
+          <div class="jcard-location">📍 Tripolia Bazar, Jaipur</div>
+        </div>
+        <div class="jcard-body">
+          <div class="jcard-stars" style="color:var(--gold)">★★★★★</div>
+          <div class="jcard-rating-row">
+            <span class="jcard-score">5.0</span>
+            <span class="jcard-rcount">61 reviews</span>
+          </div>
+          <div class="jcard-tags">
+            <span class="jtag">Bridal</span>
+            <span class="jtag">Sets</span>
+            <span class="jtag">Polki</span>
+          </div>
+          <button class="jcard-action" onclick="pickJeweller('Savitri Gold House')">Write a Review</button>
+        </div>
+      </div>
+
+      <div class="jcard reveal reveal-delay-4" data-tags="temple jadau kundan">
+        <div class="jcard-shine"></div>
+        <div class="jcard-top">
+          <div class="jcard-monogram mon-d">HO</div>
+          <div class="jcard-name">Hari Om Ornaments</div>
+          <div class="jcard-location">📍 Chandpole Bazar, Jaipur</div>
+        </div>
+        <div class="jcard-body">
+          <div class="jcard-stars"><span style="color:var(--gold)">★★★★</span><span style="color:rgba(200,168,75,.2)">★</span></div>
+          <div class="jcard-rating-row">
+            <span class="jcard-score">4.4</span>
+            <span class="jcard-rcount">19 reviews</span>
+          </div>
+          <div class="jcard-tags">
+            <span class="jtag">Temple</span>
+            <span class="jtag">Jadau</span>
+          </div>
+          <button class="jcard-action" onclick="pickJeweller('Hari Om Ornaments')">Write a Review</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT FEATURE SPLIT -->
+<section class="section" id="about" style="padding-top:0">
+  <div class="container">
+    <div class="feature-split reveal">
+      <div class="feature-visual">
+        <div class="big-ornament">ज़ेवर</div>
+        <div class="feature-visual-inner">
+          <div class="ornament-ring">
+            <span class="ornament-center">✦</span>
+          </div>
+        </div>
+      </div>
+      <div class="feature-content">
+        <span class="eyebrow">Why Zevar Bazaar</span>
+        <h2 class="section-title" style="font-size:clamp(24px,3vw,38px)">Tradition Meets Trust</h2>
+        <p class="section-body" style="font-size:16px">Zevar Bazaar connects you directly with part-time jewellers — artisans who carry generations of craft knowledge and pour that heritage into every piece they create.</p>
+        <div class="feature-list">
+          <div class="feature-item">
+            <span class="feature-num">01</span>
+            <div class="feature-item-text">
+              <h4>Verified Artisans</h4>
+              <p>Every jeweller is personally vetted for authenticity and craftsmanship quality.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-num">02</span>
+            <div class="feature-item-text">
+              <h4>Real Reviews</h4>
+              <p>Genuine feedback from customers who have experienced the craft first-hand.</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <span class="feature-num">03</span>
+            <div class="feature-item-text">
+              <h4>Heritage Specialties</h4>
+              <p>Kundan, polki, jadau, and gold work — rooted in Rajasthani tradition.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS & FORM -->
+<section class="section" id="review-section">
+  <div class="container">
+    <div class="reveal" style="margin-bottom:3rem">
+      <span class="eyebrow">Community Voice</span>
+      <h2 class="section-title">Reviews & Experiences</h2>
+    </div>
+    <div class="review-wrap reveal">
+      <div class="review-sidebar">
+        <div class="sidebar-title">What Customers Say</div>
+        <p class="sidebar-sub">Real experiences shared by our community of jewellery lovers.</p>
+        <div class="reviews-list" id="reviews-list">
+          <div class="r-item">
+            <div class="r-top"><span class="r-name">Priya M.</span><span class="r-jeweller">Savitri Gold House</span></div>
+            <div class="r-stars-sm">★★★★★</div>
+            <p class="r-text">Absolutely stunning bridal set — the polki work was flawless. Very fair pricing and honest service.</p>
+          </div>
+          <div class="r-item">
+            <div class="r-top"><span class="r-name">Suresh K.</span><span class="r-jeweller">Ramniwas Soni</span></div>
+            <div class="r-stars-sm">★★★★</div>
+            <p class="r-text">Beautiful kundan necklace for my wife's anniversary. Craftmanship is top notch.</p>
+          </div>
+          <div class="r-item">
+            <div class="r-top"><span class="r-name">Anita R.</span><span class="r-jeweller">Meena Jewels</span></div>
+            <div class="r-stars-sm">★★★★★</div>
+            <p class="r-text">Great gold bangles, exactly what I was looking for. Will definitely visit again.</p>
+          </div>
+        </div>
+      </div>
+      <div class="review-form-wrap">
+        <div class="form-title" id="form-title">Leave a Review</div>
+        <div class="field">
+          <label>Your Name</label>
+          <input type="text" id="f-name" placeholder="e.g. Priya Sharma" />
+        </div>
+        <div class="field">
+          <label>Select Jeweller</label>
+          <select id="f-jeweller">
+            <option value="">— Choose an artisan —</option>
+            <option>Ramniwas Soni</option>
+            <option>Meena Jewels</option>
+            <option>Savitri Gold House</option>
+            <option>Hari Om Ornaments</option>
+          </select>
+        </div>
+        <div class="star-field">
+          <label>Your Rating</label>
+          <div class="star-picker" id="star-picker">
+            <button class="sp" data-v="1" onclick="setR(1)">★</button>
+            <button class="sp" data-v="2" onclick="setR(2)">★</button>
+            <button class="sp" data-v="3" onclick="setR(3)">★</button>
+            <button class="sp" data-v="4" onclick="setR(4)">★</button>
+            <button class="sp" data-v="5" onclick="setR(5)">★</button>
+          </div>
+        </div>
+        <div class="field">
+          <label>Your Experience</label>
+          <textarea id="f-review" placeholder="Describe the craftsmanship, service, value for money…"></textarea>
+        </div>
+        <button class="submit-btn" onclick="submitR()">Submit Review</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-logo">ZEVAR BAZAAR</div>
+        <div class="footer-tagline" style="margin-top:.4rem">Celebrating Traditional Indian Jewellery</div>
+      </div>
+      <ul class="footer-links">
+        <li><a href="#">Artisans</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Reviews</a></li>
+        <li><a href="#">List Your Shop</a></li>
+      </ul>
+      <div style="font-family:var(--f-ui);font-size:11px;color:var(--muted2);letter-spacing:.06em">
+        © 2026 Zevar Bazaar
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="toast"></div>
+
+<script>
+/* nav scroll */
+window.addEventListener('scroll',()=>{
+  document.getElementById('main-nav').classList.toggle('scrolled',scrollY>60);
+});
+
+/* card shimmer tilt */
+document.querySelectorAll('.jcard').forEach(card=>{
+  card.addEventListener('mousemove',e=>{
+    const r=card.getBoundingClientRect();
+    const x=((e.clientX-r.left)/r.width-0.5)*2;
+    const y=((e.clientY-r.top)/r.height-0.5)*2;
+    card.style.transform=`perspective(600px) rotateY(${x*4}deg) rotateX(${-y*3}deg)`;
+    card.querySelector('.jcard-shine').style.setProperty('--mx',((e.clientX-r.left)/r.width*100)+'%');
+    card.querySelector('.jcard-shine').style.setProperty('--my',((e.clientY-r.top)/r.height*100)+'%');
+  });
+  card.addEventListener('mouseleave',()=>{
+    card.style.transform='perspective(600px) rotateY(0deg) rotateX(0deg)';
+  });
+});
+
+/* scroll reveal */
+const ro=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in')});
+},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>ro.observe(el));
+
+/* filter */
+function filterJ(btn,tag){
+  document.querySelectorAll('.fp').forEach(p=>p.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.jcard').forEach(c=>{
+    const show=tag==='all'||c.dataset.tags.includes(tag);
+    c.style.display=show?'':'none';
+  });
+}
+
+/* pick jeweller */
+function pickJeweller(name){
+  document.getElementById('f-jeweller').value=name;
+  document.getElementById('form-title').textContent='Review for '+name;
+  document.getElementById('review-section').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+/* star rating */
+let curR=0;
+function setR(v){
+  curR=v;
+  document.querySelectorAll('.sp').forEach(b=>b.classList.toggle('lit',parseInt(b.dataset.v)<=v));
+}
+
+/* submit */
+function submitR(){
+  const name=document.getElementById('f-name').value.trim();
+  const jwl=document.getElementById('f-jeweller').value;
+  const txt=document.getElementById('f-review').value.trim();
+  if(!name){toast('Please enter your name.');return;}
+  if(!jwl){toast('Please select a jeweller.');return;}
+  if(!curR){toast('Please choose a star rating.');return;}
+  if(!txt){toast('Please write your review.');return;}
+  const stars='★'.repeat(curR);
+  const el=document.createElement('div');
+  el.className='r-item';
+  el.innerHTML=`<div class="r-top"><span class="r-name">${esc(name)}</span><span class="r-jeweller">${esc(jwl)}</span></div><div class="r-stars-sm">${stars}</div><p class="r-text">${esc(txt)}</p>`;
+  document.getElementById('reviews-list').prepend(el);
+  document.getElementById('f-name').value='';
+  document.getElementById('f-review').value='';
+  document.getElementById('f-jeweller').value='';
+  curR=0;
+  document.querySelectorAll('.sp').forEach(b=>b.classList.remove('lit'));
+  document.getElementById('form-title').textContent='Leave a Review';
+  toast('✦  Review submitted — thank you!');
+}
+
+function toast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('show'),3200);
+}
+function esc(s){
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+</script>
+</body>
+</html>
